@@ -2,4 +2,4 @@ venv_ns
 .env
 notebooks
 main.py
-valid data
+valid_data
