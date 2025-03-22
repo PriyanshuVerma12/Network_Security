@@ -3,7 +3,6 @@ from network_security.exception.exception import NetworkSecurityException
 from network_security.logging.logger import logging
 import os,sys
 import numpy as np
-#import dill
 import pickle
 
 from sklearn.metrics import r2_score
@@ -43,11 +42,9 @@ def save_numpy_array_data(file_path: str, array: np.array):
     
 def save_object(file_path: str, obj: object) -> None:
     try:
-        logging.info("Entered the save_object method of MainUtils class")
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "wb") as file_obj:
             pickle.dump(obj, file_obj)
-        logging.info("Exited the save_object method of MainUtils class")
     except Exception as e:
         raise NetworkSecurityException(e, sys) from e
     
@@ -56,7 +53,6 @@ def load_object(file_path: str, ) -> object:
         if not os.path.exists(file_path):
             raise Exception(f"The file: {file_path} is not exists")
         with open(file_path, "rb") as file_obj:
-            print(file_obj)
             return pickle.load(file_obj)
     except Exception as e:
         raise NetworkSecurityException(e, sys) from e
@@ -78,7 +74,7 @@ def load_numpy_array_data(file_path: str) -> np.array:
 def evaluate_models(X_train, y_train,X_test,y_test,models,param):
     try:
         report = {}
-
+        
         for i in range(len(list(models))):
             model = list(models.values())[i]
             para=param[list(models.keys())[i]]

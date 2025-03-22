@@ -38,7 +38,7 @@ class TrainingPipeline:
             logging.info("Start data Ingestion")
             data_ingestion=DataIngestion(data_ingestion_config=self.data_ingestion_config)
             data_ingestion_artifact=data_ingestion.initiate_data_ingestion()
-            logging.info(f"Data Ingestion completed and artifact: {data_ingestion_artifact}")
+            logging.info(f"Data Ingestion completed ")
             return data_ingestion_artifact
         
         except Exception as e:
@@ -48,8 +48,9 @@ class TrainingPipeline:
         try:
             data_validation_config=DataValidationConfig(training_pipeline_config=self.training_pipeline_config)
             data_validation=DataValidation(data_ingestion_artifact=data_ingestion_artifact,data_validation_config=data_validation_config)
-            logging.info("Initiate the data Validation")
+            logging.info("Initiate the Data Validation")
             data_validation_artifact=data_validation.initiate_data_validation()
+            logging.info(f"Data Ingestion Completed")
             return data_validation_artifact
         except Exception as e:
             raise NetworkSecurityException(e,sys)
@@ -59,25 +60,24 @@ class TrainingPipeline:
             data_transformation_config = DataTransformationConfig(training_pipeline_config=self.training_pipeline_config)
             data_transformation = DataTransformation(data_validation_artifact=data_validation_artifact,
             data_transformation_config=data_transformation_config)
-            
+            logging.info(f"Data Transformation Initiated")
             data_transformation_artifact = data_transformation.initiate_data_transformation()
+            logging.info(f"Data Transformation Completed")
             return data_transformation_artifact
         except Exception as e:
             raise NetworkSecurityException(e,sys)
         
     def start_model_trainer(self,data_transformation_artifact:DataTransformationArtifact)->ModelTrainerArtifact:
         try:
-            self.model_trainer_config: ModelTrainerConfig = ModelTrainerConfig(
-                training_pipeline_config=self.training_pipeline_config
-            )
-
+            self.model_trainer_config = ModelTrainerConfig(
+                training_pipeline_config=self.training_pipeline_config)
             model_trainer = ModelTrainer(
                 data_transformation_artifact=data_transformation_artifact,
                 model_trainer_config=self.model_trainer_config,
             )
-
+            logging.info(f"Model Training Initiated")
             model_trainer_artifact = model_trainer.initiate_model_trainer()
-
+            logging.info(f"Model Training Completed")
             return model_trainer_artifact
 
         except Exception as e:

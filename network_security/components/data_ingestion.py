@@ -1,9 +1,6 @@
 from network_security.exception.exception import NetworkSecurityException
 from network_security.logging.logger import logging
 
-
-## configuration of the Data Ingestion Config
-
 from network_security.entity.config_entity import DataIngestionConfig
 from network_security.entity.artifact_entity import DataIngestionArtifact
 import os
@@ -28,7 +25,7 @@ class DataIngestion:
         
     def export_collection_as_dataframe(self):
         """
-        Read data from mongodb
+        Reading the data from mongodb
         """
         try:
             database_name=self.data_ingestion_config.database_name
@@ -48,7 +45,6 @@ class DataIngestion:
     def export_data_into_feature_store(self,dataframe: pd.DataFrame):
         try:
             feature_store_file_path=self.data_ingestion_config.feature_store_file_path
-            #creating folder
             dir_path = os.path.dirname(feature_store_file_path)
             os.makedirs(dir_path,exist_ok=True)
             dataframe.to_csv(feature_store_file_path,index=False,header=True)
@@ -63,16 +59,10 @@ class DataIngestion:
                 dataframe, test_size=self.data_ingestion_config.train_test_split_ratio
             )
             logging.info("Performed train test split on the dataframe")
-
-            logging.info(
-                "Exited split_data_as_train_test method of Data_Ingestion class"
-            )
             
             dir_path = os.path.dirname(self.data_ingestion_config.training_file_path)
             
             os.makedirs(dir_path, exist_ok=True)
-            
-            logging.info(f"Exporting train and test file path.")
             
             train_set.to_csv(
                 self.data_ingestion_config.training_file_path, index=False, header=True
@@ -81,7 +71,7 @@ class DataIngestion:
             test_set.to_csv(
                 self.data_ingestion_config.testing_file_path, index=False, header=True
             )
-            logging.info(f"Exported train and test file path.")
+            logging.info(f"Exported train and test files.")
 
             
         except Exception as e:

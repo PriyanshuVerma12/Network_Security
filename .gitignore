@@ -3,3 +3,7 @@ venv_ns
 notebooks
 main.py
 valid_data
+Artifacts
+final_model
+logs
+
